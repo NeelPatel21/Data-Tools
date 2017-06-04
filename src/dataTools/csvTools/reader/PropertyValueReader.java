@@ -21,29 +21,12 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package dataTools.csvTools.writter;
-
-import dataTools.csvTools.CsvType;
-import java.nio.file.Path;
+package dataTools.csvTools.reader;
 
 /**
  *
  * @author Neel Patel
  */
-public class CsvWriterFactory {
-    
-    private CsvWriterFactory(){//private constructor for Factory class    
-    }
-    
-    public static CsvWriter getCsvWriter(Path file,CsvType ct){
-        if(ct==CsvType.PROPERTY_VALUE){
-            PropertyValueWriter cw=new PropertyValueWriter(file);
-            cw.init();
-            return cw;
-        }
-        ValueOnlyWriter cw=new ValueOnlyWriter(file);
-        cw.init();
-        return cw;
-    }
+public class PropertyValueReader {
     
 }

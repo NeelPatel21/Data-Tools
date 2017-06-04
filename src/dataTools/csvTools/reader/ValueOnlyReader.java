@@ -21,29 +21,60 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package dataTools.csvTools.writter;
+package dataTools.csvTools.reader;
 
-import dataTools.csvTools.CsvType;
+import java.io.IOException;
+import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.Iterator;
+import java.util.Map;
+import java.util.stream.Stream;
 
 /**
  *
  * @author Neel Patel
  */
-public class CsvWriterFactory {
+public class ValueOnlyReader implements CsvReader{
+    private Path file; //Path object points to a file where the data will written.
+    private String sep=","; //separator.
     
-    private CsvWriterFactory(){//private constructor for Factory class    
+    /**
+     *
+     * @param file Path object of file in which data will be stored.
+     */
+    ValueOnlyReader(Path file){
+        this.file=file;
     }
     
-    public static CsvWriter getCsvWriter(Path file,CsvType ct){
-        if(ct==CsvType.PROPERTY_VALUE){
-            PropertyValueWriter cw=new PropertyValueWriter(file);
-            cw.init();
-            return cw;
+    @Override
+    public String getSeparator() {
+        return sep;
+    }
+
+    @Override
+    public boolean setSeparator(String sep) {
+        this.sep=sep;
+        return true;
+    }
+
+    @Override
+    public Stream<String> RawRecordStream() {
+        try {
+            return Files.lines(file);
+        } catch(IOException ex) {
+            //Logger.getLogger(ValueOnlyReader.class.getName()).log(Level.SEVERE, null, ex);
+            return null;
         }
-        ValueOnlyWriter cw=new ValueOnlyWriter(file);
-        cw.init();
-        return cw;
     }
-    
+
+    @Override
+    public Stream<Map<String, String>> stream() {
+        return null;
+    }
+
+    @Override
+    public Iterator iterator() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
 }

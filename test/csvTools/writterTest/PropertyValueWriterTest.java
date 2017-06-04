@@ -21,29 +21,42 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package dataTools.csvTools.writter;
+package csvTools.writterTest;
 
 import dataTools.csvTools.CsvType;
-import java.nio.file.Path;
+import dataTools.csvTools.writter.CsvWriter;
+import dataTools.csvTools.writter.CsvWriterFactory;
+import java.nio.file.Paths;
+import java.util.Map;
+import java.util.Scanner;
+import java.util.TreeMap;
 
 /**
  *
  * @author Neel Patel
  */
-public class CsvWriterFactory {
-    
-    private CsvWriterFactory(){//private constructor for Factory class    
+public class PropertyValueWriterTest {
+    public static void main(String... arg){
+        Scanner sc=new Scanner(System.in);
+        String s,s2;
+        Map<String,String> m;
+        CsvWriter cw=CsvWriterFactory.getCsvWriter(Paths.get("abc.txt"), CsvType.PROPERTY_VALUE);
+        cw.setSeparator("abcd");
+        for(;;){
+            m=new TreeMap<>();
+            in:for(;;){
+                s=sc.next("[\\S]+");
+                if(s.equals("flush")){
+                    cw.flush();
+                    continue;
+                }else if(s.equals(";"))
+                    break in;
+                else if(s.equals("0"))
+                    return;
+                s2=sc.next("[\\S]+");
+                m.put(s, s2);
+            }
+            System.out.println(cw.writeMap(m));
+        } 
     }
-    
-    public static CsvWriter getCsvWriter(Path file,CsvType ct){
-        if(ct==CsvType.PROPERTY_VALUE){
-            PropertyValueWriter cw=new PropertyValueWriter(file);
-            cw.init();
-            return cw;
-        }
-        ValueOnlyWriter cw=new ValueOnlyWriter(file);
-        cw.init();
-        return cw;
-    }
-    
 }

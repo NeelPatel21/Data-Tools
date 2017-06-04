@@ -23,6 +23,8 @@
  */
 package dataTools.csvTools;
 
+import java.util.Arrays;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -35,6 +37,54 @@ public class Records {
     public static String makeRecord(Map<String,String> data,String sep){
         StringBuilder sb=new StringBuilder();
         data.forEach((x,y)->sb.append(x).append("=").append(y).append(sep));
+        sb.delete(sb.lastIndexOf(sep),sb.length());
         return sb.toString();
+    }
+    
+    public static String makeRecord(Map<String,String> data){
+        return makeRecord(data,",");
+    }
+    
+    public static String makeRecord(List<String> data,String sep){
+        StringBuilder sb=new StringBuilder();
+        data.forEach(x->sb.append(x).append(sep));
+        sb.delete(sb.lastIndexOf(sep),sb.length());
+        return sb.toString();
+    }
+    
+    public static String makeRecord(List<String> data){
+        return makeRecord(data,",");
+    }
+    
+    public static <P,V> V getProperty(String record,P property,String sep){
+        if(property instanceof Integer){
+            int i=(Integer)property;
+            String ar[]=record.split(sep);
+            return (V)ar[i];
+        }else if(property instanceof String){
+            try{
+                String p=(String)property;
+                String[] ar=Arrays.stream(record.split(","))
+                                .toArray(String[]::new);
+                for(String s:ar){
+                    String[] a=Arrays.stream(s.split("=",2))
+                                    .toArray(String[]::new);
+                    if(a[0].equals(p))
+                        return (V)a[1];
+                }
+            }catch(Exception e){
+            }
+            return null;
+        }else{
+            throw new IllegalArgumentException("invalid  property type");
+        }
+    }
+    
+    public static <P,V> V getProperty(String record,P property){
+        return (V)getProperty(record,property,",");
+    }
+    
+    public static <P,V> Map<P,V> parseRecord(String record,String sep){
+        return null;
     }
 }

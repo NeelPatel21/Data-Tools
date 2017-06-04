@@ -21,8 +21,9 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package dataTools.csvTools.writter;
+package dataTools.csvTools.reader;
 
+import dataTools.csvTools.writter.*;
 import dataTools.csvTools.CsvType;
 import java.nio.file.Path;
 
@@ -30,19 +31,17 @@ import java.nio.file.Path;
  *
  * @author Neel Patel
  */
-public class CsvWriterFactory {
+public class CsvReaderFactory {
     
-    private CsvWriterFactory(){//private constructor for Factory class    
+    private CsvReaderFactory(){//private constructor for Factory class    
     }
     
-    public static CsvWriter getCsvWriter(Path file,CsvType ct){
+    public static CsvReader getCsvWriter(Path file,CsvType ct){
         if(ct==CsvType.PROPERTY_VALUE){
-            PropertyValueWriter cw=new PropertyValueWriter(file);
-            cw.init();
-            return cw;
+            //PropertyValueReader cw=new PropertyValueReader(file);
+            //return cw;
         }
-        ValueOnlyWriter cw=new ValueOnlyWriter(file);
-        cw.init();
+        ValueOnlyReader cw=new ValueOnlyReader(file);
         return cw;
     }
     

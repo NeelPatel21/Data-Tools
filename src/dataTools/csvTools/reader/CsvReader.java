@@ -21,15 +21,16 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package dataTools.csvTools.writter;
+package dataTools.csvTools.reader;
 
 import java.util.Map;
+import java.util.stream.Stream;
 
 /**
  *
  * @author Neel Patel
  */
-public interface CsvWriter<P,V> extends AutoCloseable{
+public interface CsvReader extends Iterable{
     /**
      * implementation of this method should return the
        separator used to separate the values in record.
@@ -48,27 +49,19 @@ public interface CsvWriter<P,V> extends AutoCloseable{
     boolean setSeparator(String sep);
     
     /**
-     * implementation of this method should write the String as it is.<br>
-     * Note:- It is strongly recommended to use {@link writeMap} method.
-     * as the implementation of this method does not modify the record before
-       writing, problem may be occur while reading the data.
-     * @param record String record
-     * @return true if successfully written.
+     * implementation of this method should return stream over
+       the csv file.
+     * @return stream of strings read from the csv file.
      */
-    boolean writeRawRecord(String record);
+    Stream<String> RawRecordStream();
     
     /**
-     * implementation of this method should write the record create by
-       combining the values using {@code separator}.
-     * {@code data} object will contain property(column name) to value mapping.
-     * @param data Map Object
-     * @return true if successfully written.
+     * implementation of this method should return all the
+       records as Stream over the csv file.
+     * this method should return stream of Map objects each represents
+       single record as property - value mapping.
+     * @return stream of Map .
      */
-    boolean writeMap(Map<P,V> data);
+    Stream<Map<String,String>> stream();
     
-    /**
-     * implementation of this method should write the cached
-       data immediately.
-     */
-    void flush();
 }

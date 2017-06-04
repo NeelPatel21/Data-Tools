@@ -37,7 +37,7 @@ import java.util.Map;
  *
  * @author Neel Patel
  */
-class PropertyValueWriter implements CsvWriter{
+class PropertyValueWriter implements CsvWriter<String,String>{
     private Path file; //Path object points to a file where the data will written.
     private List<String> cache; //list to cache the records.
     private int cacheSize = 10; //maximum number records to cache.
