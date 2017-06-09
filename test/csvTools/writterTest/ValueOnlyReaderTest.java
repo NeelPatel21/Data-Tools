@@ -26,12 +26,9 @@ package csvTools.writterTest;
 import dataTools.csvTools.CsvType;
 import dataTools.csvTools.reader.CsvReader;
 import dataTools.csvTools.reader.CsvReaderFactory;
-import dataTools.csvTools.writter.CsvWriter;
-import dataTools.csvTools.writter.CsvWriterFactory;
 import java.nio.file.Paths;
 import java.util.Map;
 import java.util.Scanner;
-import java.util.TreeMap;
 
 /**
  *

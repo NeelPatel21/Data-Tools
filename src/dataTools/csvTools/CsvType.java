@@ -24,7 +24,15 @@
 package dataTools.csvTools;
 
 /**
- *
+ * this is {@code Enum} of the types of CSV record formate.
+ * there are two {@code enum} values define in this {@code Enum}.<br>
+ * VALUE_ONLY {@code enum} refers to a {@code value[,value]...} record formate.
+ * in VALUE_ONLY CVS formate, record is a coma separated values.<br>
+ * PROPERTY_VALUE {@code enum} refers to a
+   {@code property=value[,proprerty=value]...} record formate.
+ * in PROPERTY_VALUE CVS formate, record is a coma separated property-value mapping.<br>
+ * Note:- {@code ','} is a default separator. some classes support different
+   separators. 
  * @author Neel Patel
  */
 public enum CsvType {

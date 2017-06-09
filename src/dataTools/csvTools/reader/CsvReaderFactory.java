@@ -35,6 +35,12 @@ public class CsvReaderFactory {
     private CsvReaderFactory(){//private constructor for Factory class    
     }
     
+    /**
+     * this method returns the Object of CsvReader of specified formate.
+     * @param file path of CSV file.
+     * @param ct CSV type.
+     * @return 
+     */
     public static CsvReader getCsvReader(Path file,CsvType ct){
         if(ct==CsvType.PROPERTY_VALUE){
             PropertyValueReader cw=new PropertyValueReader(file);

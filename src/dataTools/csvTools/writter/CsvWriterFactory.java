@@ -35,6 +35,14 @@ public class CsvWriterFactory {
     private CsvWriterFactory(){//private constructor for Factory class    
     }
     
+    /**
+     * this method returns the Object of CsvWriter of specified formate.
+     * new file & required directories created if path is not exist.
+     * if file is exist then the data will be appended at the end of file.
+     * @param file path of CSV file.
+     * @param ct CSV type.
+     * @return 
+     */
     public static CsvWriter getCsvWriter(Path file,CsvType ct){
         if(ct==CsvType.PROPERTY_VALUE){
             PropertyValueWriter cw=new PropertyValueWriter(file);

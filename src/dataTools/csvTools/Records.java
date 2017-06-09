@@ -29,12 +29,21 @@ import java.util.List;
 import java.util.Map;
 
 /**
- *
+ * this is factory class, provides functionality to process the CSV records.
+ * it support VALUE_ONLY and PROPERTY_VALUE CSV formates.
  * @author Neel Patel
  */
 public class Records {
     private Records(){}
     
+    /**
+     * this method make the record using {@code data) and {@code sep}.
+     * this method return record as String in the formate
+       {@code key=value[,key=value]...}.
+     * @param data data as Map Object.
+     * @param sep separator as String.
+     * @return record of type PROPERTY_VALUE type as String.
+     */
     public static String makeRecord(Map<String,String> data,String sep){
         StringBuilder sb=new StringBuilder();
         data.forEach((x,y)->sb.append(x).append("=").append(y).append(sep));
@@ -42,10 +51,28 @@ public class Records {
         return sb.toString();
     }
     
+    /**
+     * this method make the record using {@code data}.
+     * this method return record as String in the formate
+       {@code key=value[,key=value]...}.
+     * it use {@code ","} as separator.
+     * it returns same result as method call {@code makeRecord(data,",")}.
+     * @param data data as Map Object.
+     * @return record of type PROPERTY_VALUE type as String.
+     */
     public static String makeRecord(Map<String,String> data){
         return makeRecord(data,",");
     }
     
+    /**
+     * this method make the record using {@code data) and {@code sep}.
+     * this method return record as String in the formate.
+       {@code key=value[,key=value]...}.
+     * order of the values in the record is same as order in the List.
+     * @param data data as List Object.
+     * @param sep separator as String.
+     * @return record of type VALUE_ONLY type as String.
+     */
     public static String makeRecord(List<String> data,String sep){
         StringBuilder sb=new StringBuilder();
         data.forEach(x->sb.append(x).append(sep));
@@ -53,10 +80,34 @@ public class Records {
         return sb.toString();
     }
     
+    /**
+     * this method make the record using {@code data) and {@code sep}.
+     * this method return record as String in the formate.
+       {@code key=value[,key=value]...}.
+     * order of the values in the record is same as order in the List.
+     * it use {@code ","} as separator.
+     * it returns same result as method call {@code makeRecord(data,",")}.
+     * @param data data as List Object.
+     * @return record of type VALUE_ONLY type as String.
+     */
     public static String makeRecord(List<String> data){
         return makeRecord(data,",");
     }
     
+    /**
+     * returns the value of the property.
+     * it returns {@code null} if the value is not available for the property.
+     * in VALUE_ONLY CSV type, the property is the index of the value in record
+       starts with '0'.
+     * @param <P> type of property. in VALUE_ONLY type, it is {@code Integer} and
+       in PROPERTY_VALUE CVS type, it is {@code String}.
+     * @param <V> type of property. it should be {@code String}.
+     * @param record row record as String.
+     * @param property property
+     * @param sep separator as string.
+     * @return value if available. otherwise {@code null}.
+     * @throws IllegalArgumentException if record formate is invalid.
+     */
     public static <P,V> V getProperty(String record,P property,String sep){
         if(property instanceof Integer){
             int i=(Integer)property;
@@ -81,10 +132,40 @@ public class Records {
         }
     }
     
+    /**
+     * returns the value of the property.
+     * it returns {@code null} if the value is not available for the property.
+     * in VALUE_ONLY CSV type, the property is the index of the value in record
+       starts with '0'.
+     * it use {@code ","} as separator.
+     * it returns same result as method call {@code getProperty(record,property,",")}.
+     * @param <P> type of property. in VALUE_ONLY type, it is {@code Integer} and
+       in PROPERTY_VALUE CVS type, it is {@code String}.
+     * @param <V> type of property. it should be {@code String}.
+     * @param record row record as String.
+     * @param property property
+     * @return value if available. otherwise {@code null}.
+     * @throws IllegalArgumentException if record formate is invalid.
+     */
     public static <P,V> V getProperty(String record,P property){
         return (V)getProperty(record,property,",");
     }
     
+    /**
+     * this method returns record as Map object.
+     * if the type is VALUE_ONLY then this method returns the object
+       of type {@code Map<Integer,String>} in which keys represents indexes.
+     * if the type is PROPERTY_VALUE then this method returns the object
+       of type {@code Map<Integer,String>}.
+     * @param <P> type of property. Integer for VALUE_ONLY and String for
+       PROPERTY_VALUE.
+     * @param <V> type of value. String for VALUE_ONLY and PROPERTY_VALUE.
+     * @param record row record as string.
+     * @param sep separator as string.
+     * @param type type of CSV formate.
+     * @return record as Map.
+     * @throws IllegalArgumentException if record formate is invalid.
+     */
     public static <P,V> Map<P,V> parseRecord(String record,String sep,CsvType type){
         if(type.equals(CsvType.VALUE_ONLY)){
             Map<Integer,String> m=new HashMap<>();
@@ -108,10 +189,42 @@ public class Records {
         }
     }
     
+    /**
+     * this method returns record as Map object.
+     * if the type is VALUE_ONLY then this method returns the object
+       of type {@code Map<Integer,String>} in which keys represents indexes.
+     * if the type is PROPERTY_VALUE then this method returns the object
+       of type {@code Map<Integer,String>}.
+     * it use {@code ","} as separator.
+     * it returns same result as method call {@code parseRecord(record, ",", type)}.
+     * @param <P> type of property. Integer for VALUE_ONLY and String for
+       PROPERTY_VALUE.
+     * @param <V> type of value. String for VALUE_ONLY and PROPERTY_VALUE.
+     * @param record row record as string.
+     * @param type type of CSV formate.
+     * @return record as Map.
+     * @throws IllegalArgumentException if record formate is invalid.
+     */
     public static <P,V> Map<P,V> parseRecord(String record,CsvType type){
         return parseRecord(record, ",", type);
     }
     
+    /**
+     * this method returns record as Map object.
+     * if the type is VALUE_ONLY then this method returns the object
+       of type {@code Map<Integer,String>} in which keys represents indexes.
+     * if the type is PROPERTY_VALUE then this method returns the object
+       of type {@code Map<Integer,String>}.
+     * it first try to parse the record as PROPERTY_VALUE formate. if it fails
+       then it try to parse it as a VALUE_ONLY record.
+     * @param <P> type of property. Integer for VALUE_ONLY and String for
+       PROPERTY_VALUE.
+     * @param <V> type of value. String for VALUE_ONLY and PROPERTY_VALUE.
+     * @param record row record as string.
+     * @param sep separator as string.
+     * @return record as Map.
+     * @throws IllegalArgumentException if record formate is invalid.
+     */
     public static <P,V> Map<P,V> parseRecord(String record,String sep){
         try{
             return parseRecord(record, sep, CsvType.PROPERTY_VALUE);
@@ -120,6 +233,23 @@ public class Records {
         return parseRecord(record, sep, CsvType.VALUE_ONLY);
     }
     
+    /**
+     * this method returns record as Map object.
+     * if the type is VALUE_ONLY then this method returns the object
+       of type {@code Map<Integer,String>} in which keys represents indexes.
+     * if the type is PROPERTY_VALUE then this method returns the object
+       of type {@code Map<Integer,String>}.
+     * it first try to parse the record as PROPERTY_VALUE formate. if it fails
+       then it try to parse it as a VALUE_ONLY record.
+     * it use {@code ","} as separator.
+     * it returns same result as method call {@code parseRecord(record, ",")}.
+     * @param <P> type of property. Integer for VALUE_ONLY and String for
+       PROPERTY_VALUE.
+     * @param <V> type of value. String for VALUE_ONLY and PROPERTY_VALUE.
+     * @param record row record as string.
+     * @return record as Map.
+     * @throws IllegalArgumentException if record formate is invalid.
+     */
     public static <P,V> Map<P,V> parseRecord(String record){
         return parseRecord(record,",");
     }
