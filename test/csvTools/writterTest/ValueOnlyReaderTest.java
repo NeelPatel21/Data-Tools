@@ -24,6 +24,8 @@
 package csvTools.writterTest;
 
 import dataTools.csvTools.CsvType;
+import dataTools.csvTools.reader.CsvReader;
+import dataTools.csvTools.reader.CsvReaderFactory;
 import dataTools.csvTools.writter.CsvWriter;
 import dataTools.csvTools.writter.CsvWriterFactory;
 import java.nio.file.Paths;
@@ -35,28 +37,13 @@ import java.util.TreeMap;
  *
  * @author Neel Patel
  */
-public class ValueOnlyWriterTest {
+public class ValueOnlyReaderTest {
     public static void main(String... arg){
         Scanner sc=new Scanner(System.in);
-        String s;
-        Map<Integer,String> m;
-        CsvWriter cw=CsvWriterFactory.getCsvWriter(Paths.get("abc.txt"), CsvType.VALUE_ONLY);
-        do{
-            m=new TreeMap<>();
-            int i=0;
-            in:for(;;){
-                s=sc.next("[\\S]+");
-                if(s.equals("flush")){
-                    cw.flush();
-                    continue;
-                }else if(s.equals(";"))
-                    break in;
-                else if(s.equals("0"))
-                    return;
-                m.put(i,s);
-                i++;
-            }
-            System.out.println(cw.writeMap(m));
-        }while(!s.equals("0")); 
+        String s,s2;
+        CsvReader<?,?> cw=CsvReaderFactory.getCsvReader(Paths.get("abc.txt"), CsvType.VALUE_ONLY);
+        for(Map<?,?> m:cw){
+            System.out.println(m);
+        }
     }
 }

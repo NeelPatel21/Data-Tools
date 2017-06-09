@@ -24,6 +24,7 @@
 package dataTools.csvTools;
 
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -64,7 +65,7 @@ public class Records {
         }else if(property instanceof String){
             try{
                 String p=(String)property;
-                String[] ar=Arrays.stream(record.split(","))
+                String[] ar=Arrays.stream(record.split(sep))
                                 .toArray(String[]::new);
                 for(String s:ar){
                     String[] a=Arrays.stream(s.split("=",2))
@@ -84,7 +85,42 @@ public class Records {
         return (V)getProperty(record,property,",");
     }
     
+    public static <P,V> Map<P,V> parseRecord(String record,String sep,CsvType type){
+        if(type.equals(CsvType.VALUE_ONLY)){
+            Map<Integer,String> m=new HashMap<>();
+            String ar[]=record.split(sep);
+            for(int i=0;i<ar.length;i++)
+                m.put(i,ar[i]);
+            return (Map<P,V>)m;
+        }
+        else{
+            Map<String,String> m=new HashMap<>();
+            String ar[]=record.split(sep);
+            for(int i=0;i<ar.length;i++){
+                String rec[]=ar[i].split("=",2);
+                try{
+                    m.put(rec[0],rec[1]);
+                }catch(ArrayIndexOutOfBoundsException ex){
+                    throw new IllegalArgumentException("invalid record formate.");
+                }
+            }
+            return (Map<P,V>)m;
+        }
+    }
+    
+    public static <P,V> Map<P,V> parseRecord(String record,CsvType type){
+        return parseRecord(record, ",", type);
+    }
+    
     public static <P,V> Map<P,V> parseRecord(String record,String sep){
-        return null;
+        try{
+            return parseRecord(record, sep, CsvType.PROPERTY_VALUE);
+        }catch(Exception ex){
+        }
+        return parseRecord(record, sep, CsvType.VALUE_ONLY);
+    }
+    
+    public static <P,V> Map<P,V> parseRecord(String record){
+        return parseRecord(record,",");
     }
 }

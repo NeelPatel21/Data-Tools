@@ -41,7 +41,6 @@ public class PropertyValueWriterTest {
         String s,s2;
         Map<String,String> m;
         CsvWriter cw=CsvWriterFactory.getCsvWriter(Paths.get("abc.txt"), CsvType.PROPERTY_VALUE);
-        cw.setSeparator("abcd");
         for(;;){
             m=new TreeMap<>();
             in:for(;;){

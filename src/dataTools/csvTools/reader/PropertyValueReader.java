@@ -23,10 +23,73 @@
  */
 package dataTools.csvTools.reader;
 
+import dataTools.csvTools.CsvType;
+import dataTools.csvTools.Records;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.util.Iterator;
+import java.util.Map;
+import java.util.stream.Stream;
+
 /**
  *
  * @author Neel Patel
  */
-public class PropertyValueReader {
+public class PropertyValueReader implements CsvReader<String,String>{
+    private Path file; //Path object points to a file where the data will written.
+    private String sep=","; //separator.
     
+    /**
+     *
+     * @param file Path object of file in which data will be stored.
+     */
+    PropertyValueReader(Path file){
+        this.file=file;
+    }
+    
+    @Override
+    public String getSeparator() {
+        return sep;
+    }
+
+    @Override
+    public boolean setSeparator(String sep) {
+        this.sep=sep;
+        return true;
+    }
+
+    @Override
+    public Stream<String> RawRecordStream() {
+        try {
+            return Files.lines(file);
+        } catch(IOException ex) {
+            //Logger.getLogger(ValueOnlyReader.class.getName()).log(Level.SEVERE, null, ex);
+            return null;
+        }
+    }
+
+    @Override
+    public Stream<Map<String, String>> stream() {
+        try {
+            return Files.lines(file)
+                      .map(x->Records.parseRecord(x, CsvType.PROPERTY_VALUE));
+        } catch(IOException ex) {
+            //Logger.getLogger(ValueOnlyReader.class.getName()).log(Level.SEVERE, null, ex);
+            return null;
+        }
+    }
+
+    @Override
+    public Iterator<Map<String,String>> iterator() {
+        try {
+            return Files.lines(file)
+                      .map(x->Records.<String,String>parseRecord(x,sep, CsvType.PROPERTY_VALUE))
+                      .iterator();
+        } catch(IOException ex) {
+            //Logger.getLogger(ValueOnlyReader.class.getName()).log(Level.SEVERE, null, ex);
+            return null;
+        }
+    }
+
 }

@@ -114,7 +114,7 @@ class ValueOnlyWriter implements CsvWriter<Integer,String>{
             throw new IllegalArgumentException("invalid key format.");
         }
         for(int i=0;i<=max;i++)
-            temp.add(data.getOrDefault(i+"", ""));
+            temp.add(data.getOrDefault(i, ""));
         String record= Records.makeRecord(temp, sep);
         return writeRawRecord(record);
     }

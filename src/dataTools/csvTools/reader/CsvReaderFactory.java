@@ -23,7 +23,6 @@
  */
 package dataTools.csvTools.reader;
 
-import dataTools.csvTools.writter.*;
 import dataTools.csvTools.CsvType;
 import java.nio.file.Path;
 
@@ -36,10 +35,10 @@ public class CsvReaderFactory {
     private CsvReaderFactory(){//private constructor for Factory class    
     }
     
-    public static CsvReader getCsvWriter(Path file,CsvType ct){
+    public static CsvReader getCsvReader(Path file,CsvType ct){
         if(ct==CsvType.PROPERTY_VALUE){
-            //PropertyValueReader cw=new PropertyValueReader(file);
-            //return cw;
+            PropertyValueReader cw=new PropertyValueReader(file);
+            return cw;
         }
         ValueOnlyReader cw=new ValueOnlyReader(file);
         return cw;

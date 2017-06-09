@@ -30,7 +30,7 @@ import java.util.stream.Stream;
  *
  * @author Neel Patel
  */
-public interface CsvReader extends Iterable{
+public interface CsvReader<P,V> extends Iterable<Map<P,V>>{
     /**
      * implementation of this method should return the
        separator used to separate the values in record.
@@ -62,6 +62,6 @@ public interface CsvReader extends Iterable{
        single record as property - value mapping.
      * @return stream of Map .
      */
-    Stream<Map<String,String>> stream();
+    Stream<Map<P,V>> stream();
     
 }

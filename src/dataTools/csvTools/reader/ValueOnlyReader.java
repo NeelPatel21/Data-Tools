@@ -23,6 +23,8 @@
  */
 package dataTools.csvTools.reader;
 
+import dataTools.csvTools.CsvType;
+import dataTools.csvTools.Records;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -34,7 +36,7 @@ import java.util.stream.Stream;
  *
  * @author Neel Patel
  */
-public class ValueOnlyReader implements CsvReader{
+public class ValueOnlyReader implements CsvReader<Integer,String>{
     private Path file; //Path object points to a file where the data will written.
     private String sep=","; //separator.
     
@@ -68,13 +70,26 @@ public class ValueOnlyReader implements CsvReader{
     }
 
     @Override
-    public Stream<Map<String, String>> stream() {
-        return null;
+    public Stream<Map<Integer, String>> stream() {
+        try {
+            return Files.lines(file)
+                      .map(x->Records.parseRecord(x,sep, CsvType.VALUE_ONLY));
+        } catch(IOException ex) {
+            //Logger.getLogger(ValueOnlyReader.class.getName()).log(Level.SEVERE, null, ex);
+            return null;
+        }
     }
 
     @Override
-    public Iterator iterator() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public Iterator<Map<Integer,String>> iterator() {
+        try {
+            return Files.lines(file)
+                      .map(x->Records.<Integer,String>parseRecord(x, CsvType.VALUE_ONLY))
+                      .iterator();
+        } catch(IOException ex) {
+            //Logger.getLogger(ValueOnlyReader.class.getName()).log(Level.SEVERE, null, ex);
+            return null;
+        }
     }
 
 }
